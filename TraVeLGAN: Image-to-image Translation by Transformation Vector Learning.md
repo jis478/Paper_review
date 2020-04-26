@@ -22,7 +22,7 @@ TraVeLGAN: Image-to-image Translation by Transformation Vector Learning
 -	특히, generator에 부여되는 cycle-consistency 제약은 inverse가 쉬운 방향으로 generator를 학습하게 만들기 때문에 (inverse가 잘 되어야만 원본->가짜->원본으로 translation 된 이미지와 원본 이미지 간의 loss가 줄어들기 때문임), 실제 translation이 inverse가 매우 어려운 문제라면 inverse를 단순화하기 때문에 낮은 translation 성능을 보일 수 밖에 없다. 또한, cycle-consistency loss는 pixel-wise MSE를 기반으로 계산되기 때문에 MSE를 줄이기 위해 생성되는 이미지가 mean 이미지로 생성 하게끔 유도하게 되는 결점이 존재한다.
 
 # Model
--	Notations: ![Representative image](https://github.com/jis478/Paper_review/upload/master/imgs/travelgan/imgs/1.jpg)
+-	Notations: ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/travelgan/imgs/1.jpg)
  X 도메인에 속하는 이미지, Y도 같은 방법으로 표기
   Y->X로 translation
 -	Domain membership:   
