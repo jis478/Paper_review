@@ -34,20 +34,26 @@ FUNIT: Few-Shot Unsupervised Image-to-Image Translation
 #	Few-shot Unsupervised Image Translation
 -----------------------------------------
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/1.jpg)
+![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/2.jpg.png)
+
 
 -	FUNIT을 학습하기 위해서는 다양한 class로 이루어진 unpaired 학습 데이터 셋을 구성해야한다. 학습은 기본적으로 mult-class translation model이 된다.
 -	한편 translation 시에는 소량의 이미지 (few images)만을 가지고 target class로의 translation을 수행한다. 
 -	일반적으로 Generator는 한 개의 이미지를 가지고 translation을 수행하는데, 여기서는 대신 K장의 이미지를 가지고 translation을 수행하는 것이 특징이다. 여기서 y1…yk 이미지는 모두 동일한 class cy에 속하는 이미지 이며, x는 class cx에 속하는 이미지로써, 서로 다른 class가 되어야 한다.
+    ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/3.jpg.png)
+
  
 ## Few-shot Image Translator
 
 -	Generator는 few-shot image translator라고 부르기로 한다.
 -	생성되는 이미지는 class cy에 속하는 이미지가 될 것이지만, 기본적으로 큰 이미지의 특성은 x와 비슷한 형태를 가질 것이다.
 -	Generator G는 총 3개의 네트워크로 구성이 된다. 
+    ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/4.jpg.png)
+
  
 #### 1)	Content Encoder Ex
 Content image x를 content latent code Zx로 만들어준다. (Zx는 feature map을 의미)
-	Class-invariant latent 특성을 찾을 수 있다. (eg. Object pose)
+     Class-invariant latent 특성을 찾을 수 있다. (eg. Object pose)
 2)	Class Decoder Ey
 K개의 class image {y1, … , yk}로 임의의 latent vector로 만들고, 이를 평균내어서 최종 class latent code Zy를 구한다.
 	Class-specific latent 특성을 찾을 수 있다. (eg. Object appearance)
