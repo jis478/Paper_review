@@ -22,49 +22,45 @@ TraVeLGAN: Image-to-image Translation by Transformation Vector Learning
 -	특히, generator에 부여되는 cycle-consistency 제약은 inverse가 쉬운 방향으로 generator를 학습하게 만들기 때문에 (inverse가 잘 되어야만 원본->가짜->원본으로 translation 된 이미지와 원본 이미지 간의 loss가 줄어들기 때문임), 실제 translation이 inverse가 매우 어려운 문제라면 inverse를 단순화하기 때문에 낮은 translation 성능을 보일 수 밖에 없다. 또한, cycle-consistency loss는 pixel-wise MSE를 기반으로 계산되기 때문에 MSE를 줄이기 위해 생성되는 이미지가 mean 이미지로 생성 하게끔 유도하게 되는 결점이 존재한다.
 
 # Model
--	Notations: ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/travelgan/imgs/1.jpg)
- X 도메인에 속하는 이미지, Y도 같은 방법으로 표기
-  Y->X로 translation
+-	Notations: 
+    ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/travelgan/imgs/1.jpg)
+    X 도메인에 속하는 이미지, Y도 같은 방법으로 표기
+    ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/travelgan/imgs/2.jpg)
+    Y->X로 translation
 -	Domain membership:   
--	Individuality:  사이에 관계가 있어야 함. 즉, xi로부터 translation되는 이미지는 Y 도메인의 아무 이미지가 아닌, xi와 유사한 특정 이미지여야 함. CycleGAN에서는 Cycle-consistency로 제약을 주었지만, 여기서는 xi 이미지들간의 관계 와 GXY(xi) 이미지들의 관계를 암묵적(implicit)하게 매칭시키는 방법으로 제약을 부여 함
--	    이는 vector의 방향 뿐만 아니라 크기(magnitude)까지 모두 같아야 한다는 것을 의미 함
--	하지만, 이미지에 바로 위의 공식을 적용하는 것은 pixel 단위로 관계를 보는 것을 의미하기 때문에, word2vec embedding과 유사하게 feature 간의 관계를 보는 것으로 다시 생각해볼 수 있다.   여기서 S는 high-level semantic feature를 배우는 네트워크를 의미한다.
+    ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/travelgan/imgs/3.jpg)
+-	Individuality:  
+    ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/travelgan/imgs/4.jpg) 사이에 관계가 있어야 함. 즉, xi로부터 translation되는 이미지는 Y 도메인의 아무 이미지가 아닌, xi와 유사한 특정 이미지여야 함. CycleGAN에서는 Cycle-consistency로 제약을 주었지만, 여기서는 xi 이미지들간의 관계 와 GXY(xi) 이미지들의 관계를 암묵적(implicit)하게 매칭시키는 방법으로 제약을 부여 함
+-	![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/travelgan/imgs/5.jpg) ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/travelgan/imgs/6.jpg) 이는 vector의 방향 뿐만 아니라 크기(magnitude)까지 모두 같아야 한다는 것을 의미 함
+-	하지만, 이미지에 바로 위의 공식을 적용하는 것은 pixel 단위로 관계를 보는 것을 의미하기 때문에, word2vec embedding과 유사하게 feature 간의 관계를 보는 것으로 다시 생각해볼 수 있다.  ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/travelgan/imgs/7.jpg) 여기서 S는 high-level semantic feature를 배우는 네트워크를 의미한다.
 -	즉, 네트워크 S는 원본 도메인에 있는 이미지들을 latent space상으로 매핑하는데, 매핑된 point들의 관계가 translation한 후의 이미지 (타겟 도메인) 들을 latent space상으로 매핑한 point들의 관계와 동일하게 만드는 것이 목표가 된다. 
+![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/travelgan/imgs/8.jpg)
  
--	여기서 G와 S는 상호 협력적인 관계를 가지게 되는데 (G와 D는 적대적 관계), 두 네트워크가모두 loss를 낮추는 방향으로 학습이 되기 때문이다. 하지만 하나의 문제가, 만약 위의 loss 만으로 학습을 진행한다면 S는 항상 “0”의 값만 내뱉는 네트워크로 훈련이 될 수 있기 때문에 (0으로 내뱉으면 loss가 0이 됨) 여기에 대한 추가 제약이 필요하다.  여기서 S는 Siamese network이기 때문에, 원래 Siamese 네트워크에서 자주 사용하는 contrastive loss를 응용하게 된다.  
+-	여기서 G와 S는 상호 협력적인 관계를 가지게 되는데 (G와 D는 적대적 관계), 두 네트워크가모두 loss를 낮추는 방향으로 학습이 되기 때문이다. 하지만 하나의 문제가, 만약 위의 loss 만으로 학습을 진행한다면 S는 항상 “0”의 값만 내뱉는 네트워크로 훈련이 될 수 있기 때문에 (0으로 내뱉으면 loss가 0이 됨) 여기에 대한 추가 제약이 필요하다.  여기서 S는 Siamese network이기 때문에, 원래 Siamese 네트워크에서 자주 사용하는 contrastive loss를 응용하게 된다.  ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/travelgan/imgs/9.jpg)
 
 최종 loss는 다음과 같다. 
+![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/travelgan/imgs/10.jpg)
+![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/travelgan/imgs/11.jpg)
  
  
 
 # Experiments
-Similar domains (유사 도메인간 Translation)
+### Similar domains (유사 도메인간 Translation)
 Translation이 잘되는 것을 볼 수 있으나, 정량적인 수치로 표현한다면 사실 CycleGAN이 더 잘 translation하는 것으로 볼 수 있다. 즉, 기본적인 global feature를 공유하는 translation에서는 TravelGAN이 SOTA의 성능을 보이는 것이 아니라는 것을 확인할 수 있다.
+
+![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/travelgan/imgs/12.jpg)
  
-주된 이유는 Loss 설정에서 기인할 수 있는데, TravelGAN에서는 MSE 기반의 Cycle-consistency loss가 없기 때문에 pixel-wise 보다는 semantic feature 위주로 학습이 되고, 따라서 의도치 않은 translation이 일어나기도 하는 것을 볼 수가 있다. (모자만 제거하고 싶은데 머리 색상 이나 배경 색상 바뀜)
-신발 예제에서는 이러한 특성이 더욱 강하게 나타나는데, latent space는 semantic feature를 대변한다는 것을 생각해보았을 때, TravelGAN의 latent space 상에서 계산하는 loss는 pixel-wise와는 다르게 원본 이미지에 국한되지 않고 다양한 색상을 가진 신발로 생성할 수 있도록 하는 것으로 볼 수 있다.
- 
- 
+주된 이유는 Loss 설정에서 기인할 수 있는데, TravelGAN에서는 MSE 기반의 Cycle-consistency loss가 없기 때문에 pixel-wise 보다는 semantic feature 위주로 학습이 되고, 따라서 의도치 않은 translation이 일어나기도 하는 것을 볼 수가 있다. (모자만 제거하고 싶은데 머리 색상 이나 배경 색상 바뀜) 특히, 아래 예제 중에서 마지막 sketch <-> Shoe 예제에서는 이러한 특성이 더욱 강하게 나타나는데, latent space는 semantic feature를 대변한다는 것을 생각해보았을 때, TravelGAN의 latent space 상에서 계산하는 loss는 pixel-wise와는 다르게 원본 이미지에 국한되지 않고 다양한 색상을 가진 신발로 생성할 수 있도록 하는 것으로 볼 수 있다.
 
-
- 
-
+![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/travelgan/imgs/13.jpg)
+![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/travelgan/imgs/14.jpg)
+![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/travelgan/imgs/15.jpg)
 
 
 
-
-
-
-
-
-
-
-
-
-
-Diverse Domains (이종 도메인 간 translation)
+### Diverse Domains (이종 도메인 간 translation)
 상기 예제에서는 유사한 도메인간의 translation을 보았다면, 이번 예제에서는 서로 완전히 다른 형태의 domain 간의 translation을 테스트 한다. 이는 전통적으로 Image to Image translation에서 취약하게 나타나는 영역이며, TravelGAN을 활용하면 급격한 변화가 일어나는 translation에서도 좋은 결과를 볼 수 있는 것을 확인 할 수 있다.
- 
+
  
 특히 위에 그림은 Abacus에서 Crossword로 변환한 예제인데, cycle consistency loss를 쓸 경우에는 overfitting한 translation (검은 돌은 무조건 거의  -> 하얀 영역으로 변환)이 일어나서 실제 Crossword 같은 이미지 생성이 어려운 반면, TravelGAN은 이와 다르게 one-to-many translation이 가능하기 때문에 (검은돌 -> 하안영역, 검은 영역으로 모두 변환 가능) 보다 현실적인 crossword가 생성된 다는 것을 볼 수 있다.
  
