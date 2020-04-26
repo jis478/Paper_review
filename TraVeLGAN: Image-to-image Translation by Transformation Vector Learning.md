@@ -1,7 +1,8 @@
 TraVeLGAN: Image-to-image Translation by Transformation Vector Learning
 ======================================================================= 
 
-Abstract
+# Abstract
+
 -	기존 논문들의 Unpaired image-to-image translation은 cycle-consistency의 가정하에 많이 시도되었고, 그 결과가 가장 만족스러웠음. 
 -	하지만 기존 논문에서 주로 얘기하는 translation은 서로 유사한 도메인 (예를 들어 말 -> 얼룩말, 낮의 거리 -> 밤의 거리) 위주였으며, 도메인의 차이가 주로 스타일이나 텍스쳐에서 발생하는 경우였음.
 -	본 논문에서는 이렇게 유사한 도메인이 아닌, 서로 많이 다른 도메인 간의 translation을 타켓으로 하고 있음. 이를 위해서는 기존에 써왔던 cycle-consistency를 계속 고집하면 안된다고 주장 함
