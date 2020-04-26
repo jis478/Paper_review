@@ -9,19 +9,19 @@ TraVeLGAN: Image-to-image Translation by Transformation Vector Learning
 -	따라서, Siamese 네트워크로 vector transformation을 배워서 GAN 이미지 생성에 활용하는 기법을 제안 함. 즉, 기존 일반적인 GAN은 generator가 생성하는 이미지가 올바른 방향으로 생성하도록 discriminator를 이용했지만, 본 논문에서는 Siamese 넷을 추가하여 3개의 네트워크로 학습을 진행 함. (To this two-network system we add a third: a siamese network that guides the generator so that each original image shares semantics with its generated version)
 -	따라서 더 이상 cycle-consistency 제약이 필요 없기 때문에, 보다 flexible한 이미지 tranlsation이 가능 함
 
-Introduction
+# Introduction
 -	Unpaired image to image translation을 하는 경우, 특정 이미지가 translation 된 후에 이미지의 주요한 속성이 아직 남아있다는 보장을 할 수가 없다. 이를 보장하기 위해서 지금까지 여러 기법(제약; regularization)들이 쓰여왔으며, 가장 많이 쓰이는 기법은 cycle-consistency로써 generator가 서로 inverse 관계에 있도록 제약을 주는 방법이다. 
 -	일반적인 GAN에서는 latent space를 학습하기 위해서 generator와 discriminator를 병행해서 학습하게 되는데, 본 논문에서는 Siamese network까지 활용해서 latent space를 배우는 것이 특징이며, 이를 통해 cycle-consistency를 제거할 수 있게 된다.
 -	즉, generator가 이미지를 생성할 때 latent space에서 두 점 (이미지로부터 각각 매핑 된)의vector arithmetic을 유지하면서 생성하도록 하게 된다. 즉, 동일한 도메인에서의 두 이미지 사이의 transformation vector는 변환된 두 이미지간의 transformation vector와 동일해야 한다는 것이다.  이는 word2vec embedding에서 아이디어를 가져온 것으로, 쉽게 말하면 특정 도메인에 있는 이미지 A에서 사과가 오른쪽 위에 위치한 경우, 이 사과의 위치를 왼쪽 아래로 옮기는 이미지 vector transform을 생각해보면, generator가 생성하는 두 이미지 역시 같은 vector transform으로 생각할 수 있는 것이다. 
 -	TraVelGAN에서는 latent space를 학습하는 동시에 이러한 vector transform을 잘 생성하도록 학습을 진행하게 된다.
 결론적으로, TraVelGAN은 다음과 같은 특징이 있다.
-1.	Cycle-consistency 등 generator에 대해 부여되는 제약이 없음
-2.	새로운 네트워크 (Siamese)를 도입
-3.	Latent space에 대한 해석력 증대 
+    1.	Cycle-consistency 등 generator에 대해 부여되는 제약이 없음
+    2.	새로운 네트워크 (Siamese)를 도입
+    3.	Latent space에 대한 해석력 증대 
 -	이러한 특징 덕분에 기존 알고리즘으로 수행할 수 없었던 급격한 shape 변화가 있는 translation을 수행할 수가 있다.
 -	특히, generator에 부여되는 cycle-consistency 제약은 inverse가 쉬운 방향으로 generator를 학습하게 만들기 때문에 (inverse가 잘 되어야만 원본->가짜->원본으로 translation 된 이미지와 원본 이미지 간의 loss가 줄어들기 때문임), 실제 translation이 inverse가 매우 어려운 문제라면 inverse를 단순화하기 때문에 낮은 translation 성능을 보일 수 밖에 없다. 또한, cycle-consistency loss는 pixel-wise MSE를 기반으로 계산되기 때문에 MSE를 줄이기 위해 생성되는 이미지가 mean 이미지로 생성 하게끔 유도하게 되는 결점이 존재한다.
 
-Model
+# Model
 -	Notations
  X 도메인에 속하는 이미지, Y도 같은 방법으로 표기
   Y->X로 translation
@@ -37,7 +37,7 @@ Model
  
  
 
-Experiments
+# Experiments
 Similar domains (유사 도메인간 Translation)
 Translation이 잘되는 것을 볼 수 있으나, 정량적인 수치로 표현한다면 사실 CycleGAN이 더 잘 translation하는 것으로 볼 수 있다. 즉, 기본적인 global feature를 공유하는 translation에서는 TravelGAN이 SOTA의 성능을 보이는 것이 아니라는 것을 확인할 수 있다.
  
@@ -83,7 +83,7 @@ Diverse Domains (이종 도메인 간 translation)
 
 
 
-비전검사에 대한 적용 가능성
+# 비전검사에 대한 적용 가능성
 본 논문은 급격한 형태가 있는 이미지 간의 변환을 타켓으로 하고 있다. 이는 비전검사에서도 적용될 수 있는데, 양품 – 불량 이미지가 큰 관점에서 Global feature를 상호 공유(화면 구도 등) 하고, feature가 많이 다른 경우에 적용가능 할 것이다. 즉, 기존에 CycleGAN이나 MUNIT으로 변환할 수 없었던 큰 변화 (LGC side dent의 큰 dent 영역 변환)에 대해 시도해볼 수 있으며, 기존 CycleGAN 계열의 알고리즘 대비 양품 -> 불량 변환의 실패케이스가 얼마나 줄어드는지 함께 실험이 필요하다. 
 
 
