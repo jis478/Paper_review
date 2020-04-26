@@ -1,5 +1,5 @@
 TraVeLGAN: Image-to-image Translation by Transformation Vector Learning
-=== 
+======================================================================= 
 
 Abstract
 -	기존 논문들의 Unpaired image-to-image translation은 cycle-consistency의 가정하에 많이 시도되었고, 그 결과가 가장 만족스러웠음. 
