@@ -33,7 +33,7 @@ FUNIT: Few-Shot Unsupervised Image-to-Image Translation
 
 #	Few-shot Unsupervised Image Translation
 -----------------------------------------
-![rep] https://github.com/jis478/Paper_review/blob/master/imgs/funit/1.jpg
+![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/1.jpg)
 
 -	FUNIT을 학습하기 위해서는 다양한 class로 이루어진 unpaired 학습 데이터 셋을 구성해야한다. 학습은 기본적으로 mult-class translation model이 된다.
 -	한편 translation 시에는 소량의 이미지 (few images)만을 가지고 target class로의 translation을 수행한다. 
