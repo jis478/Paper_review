@@ -112,7 +112,7 @@ Translation 된 이미지가 target class에 속하는 것으로 판정이 되�
 3)	Photorealism
 Inception score로 판단하며, 얼마나 진짜 이미지 같은 양질의 이미지가 생성되었는지를 판단하는 기준이다. (양질의 이미지: 실제 이미지의 분포를 따르는 이미지의 여부)
 
-![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/10.jpg.png)
+     ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/10.jpg.png)
 
  
 4)	Distribution matching
@@ -139,6 +139,7 @@ Inception score로 판단하며, 얼마나 진짜 이미지 같은 양질의 이
  
 
 -	본 알고리즘의 성능이 제한적으로 나오는 경우는, 기존의 translation 알고리즘이 가지고 있는 단점처럼 shape이 급격하게 변하는 경우 인 것도 확인 할 수 있으며, 추후 연구가 될 분야이다.
+
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/16.jpg.png)
  
 -	다음은 Animal 및 Face dataset에 대한 수행 결과를 보여주는 예시 이다.
