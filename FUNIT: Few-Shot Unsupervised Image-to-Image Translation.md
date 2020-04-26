@@ -50,34 +50,31 @@ FUNIT: Few-Shot Unsupervised Image-to-Image Translation
 -	Generator G는 총 3개의 네트워크로 구성이 된다. 
     ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/4.jpg.png)
 
- 
-     1)	Content Encoder Ex
-     Content image x를 content latent code Zx로 만들어준다. (Zx는 feature map을 의미)
-     Class-invariant latent 특성을 찾을 수 있다. (eg. Object pose)
-    
-     2)	Class Decoder Ey
-     K개의 class image {y1, … , yk}로 임의의 latent vector로 만들고, 이를 평균내어서 최종 class latent code Zy를 구한다.
-     Class-specific latent 특성을 찾을 수 있다. (eg. Object appearance)
-    
-     3)	Decoder Fx
-     여러 개의 Adaptive instance normalization (AdaIN) residual blocks으로 이루어져있다. AdaIN residual block은 AdaIN을 normalization
-     layer로 쓰는 residual block을 의미한다.
-     Class latent code를 가지고 global look (eg. . Object appearance)를 컨트롤하게 되고, content image code가 local structure 
-     (eg. Locations of eyes)를 컨트롤 할 수 있는 특징이 있다. 
-     (추가 주석: AdaIN 이란? AdaIN 은 각 샘플의 채널마다 actgivations zero mean 값과 unit variance 값을 가지도록 normalization을 하게 된다. 그리고 사전에 학습한 affine transformation을 활용하여 변환하게 된다. Affine transformation은 기본적으로 spatially invariant하므로 global appearance information을 찾을 수 있는 특성이 있다.)
+1)	Content Encoder Ex
+Content image x를 content latent code Zx로 만들어준다. (Zx는 feature map을 의미)
+Class-invariant latent 특성을 찾을 수 있다. (eg. Object pose)
+
+2)	Class Decoder Ey
+K개의 class image {y1, … , yk}로 임의의 latent vector로 만들고, 이를 평균내어서 최종 class latent code Zy를 구한다.
+Class-specific latent 특성을 찾을 수 있다. (eg. Object appearance)
+
+3)	Decoder Fx
+여러 개의 Adaptive instance normalization (AdaIN) residual blocks으로 이루어져있다. AdaIN residual block은 AdaIN을 normalization
+layer로 쓰는 residual block을 의미한다. Class latent code를 가지고 global look (eg. . Object appearance)를 컨트롤하게 되고, content image code가 local structure (eg. Locations of eyes)를 컨트롤 할 수 있는 특징이 있다. (추가 주석: AdaIN 이란? AdaIN 은 각 샘플의 채널마다 actgivations zero mean 값과 unit variance 값을 가지도록 normalization을 하게 된다. 그리고 사전에 학습한 affine transformation을 활용하여 변환하게 된다. Affine transformation은 기본적으로 spatially invariant하므로 global appearance information을 찾을 수 있는 특성이 있다.)
 
 -	즉, 학습 동안에 class encoder는 source class (학습 데이터 셋에 존재하는 class를 의미함)에서 class specific 한 정보를 추출하며, 인퍼런스 시간에 이러한 추출 능력이 지금까지 보지못한 소량의 데이터에 일반화가 되는 것이다.
 
 
-3.2	Multi-task Adversarial Discriminator
+## Multi-task Adversarial Discriminator
+
 -	Discriminator D는 여러 개의 adversarial classification task를 동시에 수행하게 된다. 각각의 task는 binary classificiation task (진짜? 가짜 이미지 구별)이다. 만약에 |S|개의 source class가 존재한다면 D는 |S|개의 결과를 생성하게 된다.
     
-    Discriminator update rule 
-    1) Source class (Cx)의 진짜 이미지에 대해 판정할 경우, 만약 Cx번째 판정 결과가 가짜(false)일 경우 D에 대해 penalize를 하게 된다
-    2) Source class (Cx)로부터 생성된 translation image에 대해 판정할 경우, 만약 Cx번째 판정결과가 진짜(positive)일 경우 D를 penalize하게 된다. 
-    3) 다른 Source class (Cx 제외)에 대해 판정할때는 판정결과가 가짜(false)가 되더라도 D에 대해 별도의 penalize를 하지 않는다.   
+#### Discriminator update rule 
+1) Source class (Cx)의 진짜 이미지에 대해 판정할 경우, 만약 Cx번째 판정 결과가 가짜(false)일 경우 D에 대해 penalize를 하게 된다
+2) Source class (Cx)로부터 생성된 translation image에 대해 판정할 경우, 만약 Cx번째 판정결과가 진짜(positive)일 경우 D를 penalize하게 된다. 
+3) 다른 Source class (Cx 제외)에 대해 판정할때는 판정결과가 가짜(false)가 되더라도 D에 대해 별도의 penalize를 하지 않는다.   
 Generator update rule
-    4) G를 업데이트 할때는 G가 생성한 Cx class의 translation이미지가 D로부터 가짜로 판정 (false)될 경우 penalize한다. 
+4) G를 업데이트 할때는 G가 생성한 Cx class의 translation이미지가 D로부터 가짜로 판정 (false)될 경우 penalize한다. 
 
 
 ##	Learning
@@ -144,14 +141,4 @@ Inception score로 판단하며, 얼마나 진짜 이미지 같은 양질의 이
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/18.jpg.png)
  
 
- 
 
-
-
-
--	
--	
--	 
-
-
- 
