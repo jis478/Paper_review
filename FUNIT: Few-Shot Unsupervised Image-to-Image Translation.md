@@ -111,6 +111,7 @@ Translation 된 이미지가 target class에 속하는 것으로 판정이 되�
 
 3)	Photorealism
 Inception score로 판단하며, 얼마나 진짜 이미지 같은 양질의 이미지가 생성되었는지를 판단하는 기준이다. (양질의 이미지: 실제 이미지의 분포를 따르는 이미지의 여부)
+
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/10.jpg.png)
 
  
@@ -118,18 +119,22 @@ Inception score로 판단하며, 얼마나 진짜 이미지 같은 양질의 이
 두 이미지 데이터셋에 대한 feature 유사도를 측정하는 지표이며, 진짜 데이터 셋과 진짜 데이터로ranslation 데이터 셋간의 feature의 거리를 가지고 측정한다. 진짜 이미지에 있는 feature의 variance가 잘 반영된 이미지가 생성되었는지 볼 수 있다. 
 
 -	본 논문에서 제안하는 FUNIT은 다른 Baseline 모델의 성능을 모두 능가하는 결과를 보이는데, 특히 주목할 만한 것은 5-shot으로 수행한 FUNIT 모델의 경우 인퍼런스 target class 이미지를 학습 중에 본적이 없음에도 불구하고 그 성능이 unfair 환경의 CycleGAN보다 좋게 나오며, 특히 단일 Generator로 나온 성능이라는 점이 주목할 만하다.
+
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/11.jpg.png)
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/12.jpg.png)
  
  
 -	육안으로 볼 수 있는 성능 역시, FUNIT이 좀더 좋은 성능을 보인다는 것을 알 수 있다.
+
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/13.jpg.png)
  
 -	한편, source class수가 증가하면 FUNIT 모델의 성능이 좋아지는 것을 볼 수 있는데, 학습 중에 보다 많은 class diversity를 보면 성능에 도움이 된다는 것을 알 수 있다.
+
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/14.jpg.png)
  
  
 -	본 알고리즘은 단순히 GAN이 아닌, Few-shot classification 목적으로 쓸 수도 있는데, 수량이 부족한 target class에 대해 translation 된 이미지 (생성이미지: 1, 50, 100) 를 학습데이터에 넣어서 classification을 수행할 경우 그 성능이 기존 유사 접근방식의 논문 보다 좋은 것을 볼 수 있다. 
+
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/15.jpg.png)
  
 
