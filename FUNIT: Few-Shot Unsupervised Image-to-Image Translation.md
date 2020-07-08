@@ -3,14 +3,14 @@ FUNIT: Few-Shot Unsupervised Image-to-Image Translation
 
 # Abstract
 ----------
--	기존 Unpaired image-to-image translation의 경우, 결과가 비교적 성공적이나, 각 도메인 별 학습 단계에서 많은 수량의 이미지가 필요해서 이미지 수량의 적은 경우에는 그 활용도가 낮아질 수 밖에 없다.
+-	기존 Unpaired image-to-image translation의 경우, 결과가 비교적 성공적이나, 각 도메인 별 학습 단계에서 많은 수량의 이미지가 필요해서 이미지 수량의 적은 경우에는 그 활용도가 낮아질 수 밖에 없다. (CycleGAN 논문을 생각해보면.. 각 도메인 별 (얼룩말, 일반말) 수천장의 이미지가 필요했었음)
 -	일반적으로 사람의 경우에는 작은 수량의 example로도 일반화를 잘하는데, 이러한 few-shot 학습 능력에 착안해서 few-shot unsupervised image to image translation을 제안한다.
 -	본 알고리즘의 특징은, inference 단계에서 소량의 이미지만 가지고 양질의 translation 이미지를 생성할 수 있다는 장점이 있다.
 -	다른 baseline 모델과 비교해서 좋은 성능이 나오는 것을 다양한 실험으로 확인 했다.
 
 # Introduction
 --------------
---	사람은 일반화를 잘하는데, 예를 들어 서있는 한 장의 호랑이의 모습을 본 후에 누워있는 호랑이의 모습을 쉽게 상상 할 수 있다. (여러 자세에 있는 동물들을 봤던 경험해서 쉽게 상상 가능) 
+-   사람은 일반화를 잘하는데, 예를 들어 서있는 한 장의 호랑이의 모습을 본 후에 누워있는 호랑이의 모습을 쉽게 상상 할 수 있다. (여러 자세에 있는 동물들을 봤던 경험해서 쉽게 상상 가능) 
 -	기존의 Unpaired image-to-image translation (eg. CycleGAN)의 경우 few-shot의 개념이 없고, 각 도메인 별 다량의 이미지가 학습에 있어야만 인퍼런스가 가능한 단점이 있다.
 -	본 알고리즘은 인퍼런스 단계에서, 학습 때 보지 못했던 소량의 이미지만 가지고 있는 class를 활용해서 이미지를0 translation 할 수 있는 장점이 있다.
 -	(가정1) 사람이 많은 동물을 본 후에 새로운 동물을 보고 일반화를 잘하는 것 처럼, 학습 데이터 셋에 도 가급적 많은 class를 포함시켜서 학습 시에 각 class들의 특징을 익히도록 한다.
@@ -18,7 +18,7 @@ FUNIT: Few-Shot Unsupervised Image-to-Image Translation
 
 # Related Work
 --------------
---	기존 모델의 단점으로는,  
+-   기존 모델의 단점으로는,  
     1)	Sample inefficient: 학습 시에 class (또는 domain) 별 다량의 이미지가 필요하다.
     2)	모델을 만들더라도, 그 모델은 특정 두 class간의 translation에만 사용이 가능하다.
       (내 생각: 이건 one generator 모델인 StarGAN 같은 모델은 해당 안됨)
