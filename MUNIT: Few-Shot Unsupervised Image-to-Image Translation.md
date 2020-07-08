@@ -1,40 +1,55 @@
-FUNIT: Few-Shot Unsupervised Image-to-Image Translation
+MUNIT: Few-Shot Unsupervised Image-to-Image Translation
 =======================================================
 
 # Abstract
 ----------
 
--	기존 Unpaired image-to-image translation의 경우, 결과가 비교적 성공적이나, 각 도메인 별 학습 단계에서 많은 수량의 이미지가 필요해서 이미지 수량의 적은 경우에는 그 활용도가 낮아질 수 밖에 없다.
--	일반적으로 사람의 경우에는 작은 수량의 example로도 일반화를 잘하는데, 이러한 few-shot 학습 능력에 착안해서 few-shot unsupervised image to image translation을 제안한다.
--	본 알고리즘의 특징은, inference 단계에서 소량의 이미지만 가지고 양질의 translation 이미지를 생성할 수 있다는 장점이 있다.
--	다른 baseline 모델과 비교해서 좋은 성능이 나오는 것을 다양한 실험으로 확인 했다.
+-	기존 CycleGAN으로 대변되는 Unpaired Image-to-Image translation을 통해 비교적 성공적인 이미지 변환이 있었으나, translation 시에 diverse한 이미지가 나오지 못하는 단점이 존재했다.
+-	본 논문에서 제시하는 MUNIT 알고리즘에서는 다음과 같은 차이점이 있다. 
+1) 이미지는 content code와 style code로 나누어질 수 있는데, content code는 도메인과 상관없이 공통적인 특질을 가지고 있는 code이고, class code는 도메인 별 달라지는 style code이다. 
+2)	따라서, translation을 수행하기 위해서 content code와 style code를 결합해서 이미지를 생성해내는 방법을 제안하고 있다.
+3)	또한, 이러한 접근방법은 특정 style image를 제공함으로써 원하는 style로 translation을 control할 수 있는 장점이 있다. 
+
 
 # Introduction
 --------------
 
--	사람은 일반화를 잘하는데, 예를 들어 서있는 한 장의 호랑이의 모습을 본 후에 누워있는 호랑이의 모습을 쉽게 상상 할 수 있다. (여러 자세에 있는 동물들을 봤던 경험해서 쉽게 상상 가능) 
--	기존의 Unpaired image-to-image translation (eg. CycleGAN)의 경우 few-shot의 개념이 없고, 각 도메인 별 다량의 이미지가 학습에 있어야만 인퍼런스가 가능한 단점이 있다.
--	본 알고리즘은 인퍼런스 단계에서, 학습 때 보지 못했던 소량의 이미지만 가지고 있는 class를 활용해서 이미지를0 translation 할 수 있는 장점이 있다.
--	(가정1) 사람이 많은 동물을 본 후에 새로운 동물을 보고 일반화를 잘하는 것 처럼, 학습 데이터 셋에 도 가급적 많은 class를 포함시켜서 학습 시에 각 class들의 특징을 익히도록 한다.
--	(가정2) 사람은 새롭게 동물을 본 후에 그 동물 고유의 특징을 기억한 후, 기존에 봤던 다른 동물들의 자세에 그 특징을 적용해서 다른 자세의 새로운 동물을 상상해 낸다. 모델도 마찬가지로 인퍼런스에서 새로운 동물을 볼 때, 그 동물 고유의 특성에 집중하도록 한다.
+-	많은 translation 시나리오는 사실 multi-modal 한 특성을 가지고 있다. 예를 들어, “겨울” 장면은 날씨, 조명 등에 따라 다양한 이미지가 연출될 수 있다. 하지만, 기존 translation 방법론은 deterministic 또는 unimodal한 translation을 전제로 하고 있기 때문에 변환 가능 결과를 모두 커버할 수 있지 못한다. 
+-	이미지의 latent space는 content space와 latent space로 나눠질 수 있는데, 다양한 다른 도메인의 이미지가 content space를 공유하고, style space를 공유하지 않는 다는 가정이 있다.
+-	따라서 다양한 style code를 샘플링 함으로써 diverse하고 multimodal한 이미지 translation을 수행할 수가 있고, 실제 실험결과 좋은 성능을 보여주는 것으로 본 논문에서 확인이 되었다.
+-	한편, style과 content가 분리됨으로써, example-guided image translation (즉 translation target domain의 이미지에 따라 style의 변화)를 수행하게 된다.
+
 
 
 # Related Work
 --------------
 
--	기존 모델의 단점으로는,  
-    1)	Sample inefficient: 학습 시에 class (또는 domain) 별 다량의 이미지가 필요하다.
-    2)	모델을 만들더라도, 그 모델은 특정 두 class간의 translation에만 사용이 가능하다.
-      (내 생각: 이건 one generator 모델인 StarGAN 같은 모델은 해당 안됨)
--	본 논문과 유사한 few-shot쪽으로 GAN을 적용한 기존 논문이 있는데 (One-shot unsupervised cross domain translation. In Advances in Neural Information Processing Systems (NIPS), 2018) 기존 논문은 학습 시에는 class마다 한 장의 이미지만 가지고 있다고 가정하고, translation 하고자 하는 target class에는 많은 이미지가 있다고 가정하고 있는 반면, 본 논문은 반대로 학습 시에는 많은 이미지가 있고, translation 시에만 확보할 수 있는 소량의 이미지가 있다고 가정하고 있다.
--	본 논문과 유사한 multi class 쪽으로 접근한 논문도 있는데, 이 논문들은 translation 대상인 class가 학습 데이터셋 에도 있다는 가정을 하고 있다.   
--	한편, 기존에 많은 few-shot 관련 논문이 존재하나, few-shot translation을 시도한 것은 이 논문이 최초이라고 볼 수 있다.
+#### Image-to-image translation
+-	기존 Image to Image translation의 경우, Translation의 결과가 diverse한 결과를 가질 수 없는 단점이 있다. 이를 극복하기 위해 BicycleGAN 같은 특별한 형태의 GAN이 제안되었으나, 데이터셋이 unpair가 아닌 pair한 이미지가 되어야만 하는 단점이 존재한다. 
+-	Diverse한 결과라는 건 mode의 수로 얘기될 수 있는데, mode의 수는 사전에 정해지는 것이 아니기 때문에 어려움이 존재한다.
+#### Style transfer
+-	일반적인 style transfer의 경우는 single example에서 style을 transfer하지만, Image to image translation의 경우 여러 이미지에서 style을 추출해서 transfer하는 특징이 있다. 본 논문에서 제시하는 알고리즘은 두 경우를 모두 커버가 가능하다.
+#### Learning disentangled representations
+-	InfoGAN이나 beta-VAE에서 disentangled representation을 시도하였으며, 본 논문에서는 기본이 되는 feature style과 content를 disentangle를 수행했다.
 
 
-#	Few-shot Unsupervised Image Translation
+# MUNIT assumptions & modeling
 -----------------------------------------
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/1.jpg)
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/2.jpg.png)
+
+각 도메인에서 추출한 이미지 샘플:   일 때, 우리의 목적은 conditional distribution  및  를 찾는 것이며, 이는 
+ 및  와 같은 translation model를 찾는 것이다. 이러한 model은 multi-modal distribution이며, 기존의 deterministic model로는 표현할 수 없다. 
+
+문제를 풀기 위해서 partially shared latent space assumption를 생각해야 한다. 즉, content latent code와 style latent code를 분리하는데, content code는 두 도메인 모두 share하는 형태이며, style code는 특정 도메인에만 속하는 형태인 것이다.
+예를 들어 content code와 style code를 가지고 와서 generator  를 통해 이미지를 생성하는 경우로 생각 할 수 있다.  
+ 주의할 점은, encoder와 decoder 모두 deterministic하지만,  는 continuous 한 특징이 있다는 것이다. 
+
+본 논문에서 제안하는 코드는 다음과 같다. 
+첫 번째 이미지에서 추출된 content code   과
+두 번째 도메인에 해당하는 style code  를 활용해서
+Image translation  를 수행한다. 즉, 비록  은 unimodal distribution 이지만, decoder의 non-linearity 덕분에 생성되는 translation image는 multimodal이 될 수 있다. 
+
 
 
 -	FUNIT을 학습하기 위해서는 다양한 class로 이루어진 unpaired 학습 데이터 셋을 구성해야한다. 학습은 기본적으로 mult-class translation model이 된다.
