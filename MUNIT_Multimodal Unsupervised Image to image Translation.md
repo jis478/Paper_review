@@ -3,7 +3,7 @@
 # MUNIT:  Multimodal Unsupervised Image-to-image Translation
 
 
-### Abstract
+## Abstract
 -	기존 CycleGAN으로 대변되는 Unpaired Image-to-Image translation을 통해 비교적 성공적인 이미지 변환이 있었으나, translation 시에 diverse한 이미지가 나오지 못하는 단점이 존재했다.
 -	본 논문에서 제시하는 MUNIT 알고리즘에서는 다음과 같은 차이점이 있다. 
 
@@ -14,7 +14,7 @@
     
     
     
-### Introduction
+## Introduction
 -	많은 translation 시나리오는 사실 multi-modal 한 특성을 가지고 있다. 예를 들어, “겨울” 장면은 날씨, 조명 등에 따라 다양한 이미지가 연출될 수 있다. 하지만, 기존 translation 방법론은 deterministic 또는 unimodal한 translation을 전제로 하고 있기 때문에 변환 가능 결과를 모두 커버할 수 있지 못한다. 
 
 -	이미지의 latent space는 content space와 latent space로 나눠질 수 있는데, 다양한 다른 도메인의 이미지가 content space를 공유하고, style space를 공유하지 않는 다는 가정이 있다.
@@ -26,14 +26,14 @@
 
 
 
-### Related Work
+## Related Work
 
-###### Image-to-image translation
+#### Image-to-image translation
 
 -	기존 Image to Image translation의 경우, Translation의 결과가 diverse한 결과를 가질 수 없는 단점이 있다. 이를 극복하기 위해 BicycleGAN 같은 특별한 형태의 GAN이 제안되었으나, 데이터셋이 unpair가 아닌 pair한 이미지가 되어야만 하는 단점이 존재한다. 
 -	Diverse한 결과라는 건 mode의 수로 얘기될 수 있는데, mode의 수는 사전에 정해지는 것이 아니기 때문에 어려움이 존재한다.
 
-###### Style transfer
+#### Style transfer
 -	일반적인 style transfer의 경우는 single example에서 style을 transfer하지만, Image to image translation의 경우 여러 이미지에서 style을 추출해서 transfer하는 특징이 있다. 본 논문에서 제시하는 알고리즘은 두 경우를 모두 커버가 가능하다.
 Learning disentangled representations
 -	InfoGAN이나 beta-VAE에서 disentangled representation을 시도하였으며, 본 논문에서는 기본이 되는 feature style과 content를 disentangle를 수행했다.
@@ -41,7 +41,7 @@ Learning disentangled representations
 
 
 
-### MUNIT 가정 & 모델
+## MUNIT 가정 & 모델
 
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/1.jpg)
 각 도메인에서 추출한 이미지 샘플: ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/2.jpg)
@@ -71,22 +71,23 @@ Image translation ![Representative image](https://github.com/jis478/Paper_review
 
 
 
-### Loss
+## Loss
 여기서는 MUNIT에 쓰이는 loss 함수를 자세하게 알아보겠다.
 
-###### Bidirectional reconstruction loss
+
+#### Bidirectional reconstruction loss
 Encoder와 decoder를 학습하기 위해 image → latent → image 와 latent → image → latent 방향의 reconstruction loss를 설계 한다.
 
 
 
-Image reconstruction
+- Image reconstruction
 
 
 
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/18.jpg)
 
 
-Latent reconstruction
+- Latent reconstruction
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/19.jpg)
 
 
@@ -97,18 +98,25 @@ Lreconsi: 다른 style code로부터 각각 다른 이미지가 생성되도록 
 
 Lreconci: 생성된 이미지가 content 정보를 잘 보존하고 있도록 제약을 준다. 왜냐하면, 도메인1의 c1과 도메인2의 c2를 가지고 x2를 생성 후, 다시 E2c로 c1을 encoding해서 c1과 유사하게 만들게 되기 때문이다.
 
-###### Adversarial loss
+
+
+#### Adversarial loss
 일반적으로 쓰이는 GAN Adversarial loss를 의미한다.
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/21.jpg = 150x150)
 
  
-###### Total loss
+ 
+ 
+#### Total loss
 위에서 언급한 loss들을 다음과 같이 종합할 수 있다.
 
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/22.jpg)
 
+
+
+
  
-### Result
+## Result
  여기서 주의 깊게 봐야할 것은, MUNIT의 경우 기존 Baseline (CycleGAN)과는 다르게 앞서 설명한 multi-modal 성질이 반영 된다는 것이다. 즉, 신발을 translation 시킬 경우 단순하게 하나의 이미지로 translation 되는 것이 아닌 다양한 색상의 이미지로 translation 되는 것을 확인 할 수 있다. 이는 Baseline 모델과 가장 큰 차이인데, 초반에 기술한대로 "겨울" 이라는 도메인으로 translation 되더라도 다양한(multi-modal) 겨울 이미지가 연출 될 수 있음을 얘기하고 있는 것이다.
  
  ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/23.jpg)
