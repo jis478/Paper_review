@@ -80,9 +80,7 @@ Encoder와 decoder를 학습하기 위해 image → latent → image 와 latent 
 
 
 Image reconstruction
-(sharp image) 
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/18.jpg)
-
 
 
 Latent reconstruction
