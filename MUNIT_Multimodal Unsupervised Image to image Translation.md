@@ -77,9 +77,13 @@ Image translation ![Representative image](https://github.com/jis478/Paper_review
 ###### Bidirectional reconstruction loss
 Encoder와 decoder를 학습하기 위해 image → latent → image 와 latent → image → latent 방향의 reconstruction loss를 설계 한다.
 
+
+
 Image reconstruction (sharp image) 
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/18.jpg)
- 
+
+
+
 Latent reconstruction
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/19.jpg)
 
