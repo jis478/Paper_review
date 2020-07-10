@@ -82,8 +82,10 @@ Image reconstruction (sharp image)
  
 Latent reconstruction
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/19.jpg)
+
+
  
-![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/20.jpg) 도 같은 방법으로 계산이 된다.
+마찬가지로 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/20.jpg) 도 같은 방법으로 계산이 된다.
 
 Lreconsi: 다른 style code로부터 각각 다른 이미지가 생성되도록 제약을 준다. 왜냐하면, 도메인1의 c1과 도메인2의 s2를 가지고 x2를 생성 후, E2s로 도메인 2의 style을 encoding해서 원래 s2와 유사하게 만들게 됨 -> s2가 달라지면 이미지도 달라져야 하기 때문이다.
 
