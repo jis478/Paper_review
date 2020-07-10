@@ -3,7 +3,7 @@
 # MUNIT:  Multimodal Unsupervised Image-to-image Translation
 
 
-#### Abstract
+### Abstract
 -	기존 CycleGAN으로 대변되는 Unpaired Image-to-Image translation을 통해 비교적 성공적인 이미지 변환이 있었으나, translation 시에 diverse한 이미지가 나오지 못하는 단점이 존재했다.
 -	본 논문에서 제시하는 MUNIT 알고리즘에서는 다음과 같은 차이점이 있다. 
 
@@ -12,7 +12,9 @@
     3)	또한, 이러한 접근방법은 특정 style image를 제공함으로써 원하는 style로 translation을 control할 수 있는 장점이 있다. 
     
     
-#### Introduction
+    
+    
+### Introduction
 -	많은 translation 시나리오는 사실 multi-modal 한 특성을 가지고 있다. 예를 들어, “겨울” 장면은 날씨, 조명 등에 따라 다양한 이미지가 연출될 수 있다. 하지만, 기존 translation 방법론은 deterministic 또는 unimodal한 translation을 전제로 하고 있기 때문에 변환 가능 결과를 모두 커버할 수 있지 못한다. 
 
 -	이미지의 latent space는 content space와 latent space로 나눠질 수 있는데, 다양한 다른 도메인의 이미지가 content space를 공유하고, style space를 공유하지 않는 다는 가정이 있다.
@@ -22,7 +24,9 @@
 -	한편, style과 content가 분리됨으로써, example-guided image translation (즉 translation target domain의 이미지에 따라 style의 변화)를 수행하게 된다.
 
 
-#### Related Work
+
+
+### Related Work
 
 ###### Image-to-image translation
 
@@ -35,7 +39,9 @@ Learning disentangled representations
 -	InfoGAN이나 beta-VAE에서 disentangled representation을 시도하였으며, 본 논문에서는 기본이 되는 feature style과 content를 disentangle를 수행했다.
 
 
-#### MUNIT 가정 & 모델
+
+
+### MUNIT 가정 & 모델
 
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/1.jpg)
 각 도메인에서 추출한 이미지 샘플: ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/2.jpg)
@@ -64,7 +70,8 @@ Image translation ![Representative image](https://github.com/jis478/Paper_review
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/17.jpg)
 
 
-#### loss
+
+### Loss
 여기서는 MUNIT에 쓰이는 loss 함수를 자세하게 알아보겠다.
 
 ###### Bidirectional reconstruction loss
@@ -92,7 +99,7 @@ Lreconci: 생성된 이미지가 content 정보를 잘 보존하고 있도록 �
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/22.jpg)
 
  
- #### Result
+### Result
  여기서 주의 깊게 봐야할 것은, MUNIT의 경우 기존 Baseline (CycleGAN)과는 다르게 앞서 설명한 multi-modal 성질이 반영 된다는 것이다. 즉, 신발을 translation 시킬 경우 단순하게 하나의 이미지로 translation 되는 것이 아닌 다양한 색상의 이미지로 translation 되는 것을 확인 할 수 있다. 이는 Baseline 모델과 가장 큰 차이인데, 초반에 기술한대로 "겨울" 이라는 도메인으로 translation 되더라도 다양한(multi-modal) 겨울 이미지가 연출 될 수 있음을 얘기하고 있는 것이다.
  
  ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/23.jpg)
@@ -104,10 +111,7 @@ Lreconci: 생성된 이미지가 content 정보를 잘 보존하고 있도록 �
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/26.jpg)
  
  
- 
- 
- 
- #### END  
+   
  
  
 
