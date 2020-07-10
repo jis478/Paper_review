@@ -35,7 +35,7 @@ Learning disentangled representations
 -	InfoGAN이나 beta-VAE에서 disentangled representation을 시도하였으며, 본 논문에서는 기본이 되는 feature style과 content를 disentangle를 수행했다.
 
 
-###### MUNIT 가정 & 모델
+#### MUNIT 가정 & 모델
 
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/1.jpg)
 각 도메인에서 추출한 이미지 샘플: ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/2.jpg)
@@ -52,12 +52,12 @@ Learning disentangled representations
 
 은 continuous 한 특징이 있다는 것이다. 
  
- <그림11>
+![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/11.jpg)
  
  본 논문에서 제안하는 코드는 다음과 같다. 
-첫 번째 이미지에서 추출된 content code <그림12>   과
-두 번째 도메인에 해당하는 style code <그림13> 를 활용해서
-Image translation <그림14> 를 수행한다. 즉, 비록 <그림15> 은 unimodal distribution 이지만, decoder의 non-linearity 덕분에 생성되는 translation image는 multimodal이 될 수 있다. <그림16>
+첫 번째 이미지에서 추출된 content code ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/12.jpg)   과
+두 번째 도메인에 해당하는 style code ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/13.jpg) 를 활용해서
+Image translation ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/14.jpg) 를 수행한다. 즉, 비록 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/15.jpg) 은 unimodal distribution 이지만, decoder의 non-linearity 덕분에 생성되는 translation image는 multimodal이 될 수 있다. ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/16.jpg)
 
 
 #### loss
@@ -67,12 +67,12 @@ Image translation <그림14> 를 수행한다. 즉, 비록 <그림15> 은 unimod
 Encoder와 decoder를 학습하기 위해 image → latent → image 와 latent → image → latent 방향의 reconstruction loss를 설계 한다.
 
 Image reconstruction (sharp image) 
-<그림17>
+![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/17.jpg)
  
 Latent reconstruction
-<그림18>
+![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/18.jpg)
  
-<그림19> 도 같은 방법으로 계산이 된다.
+![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/19.jpg) 도 같은 방법으로 계산이 된다.
 
 Lreconsi: 다른 style code로부터 각각 다른 이미지가 생성되도록 제약을 준다. 왜냐하면, 도메인1의 c1과 도메인2의 s2를 가지고 x2를 생성 후, E2s로 도메인 2의 style을 encoding해서 원래 s2와 유사하게 만들게 됨 -> s2가 달라지면 이미지도 달라져야 하기 때문이다.
 
@@ -80,25 +80,24 @@ Lreconci: 생성된 이미지가 content 정보를 잘 보존하고 있도록 �
 
 ###### Adversarial loss
 일반적으로 쓰이는 GAN Adversarial loss를 의미한다.
-<그림 20>
+![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/20.jpg)
  
 ###### Total loss
 위에서 언급한 loss들을 다음과 같이 종합할 수 있다.
 
-<그림 21>
+![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/21.jpg)
 
  
  #### Result
  여기서 주의 깊게 봐야할 것은, MUNIT의 경우 기존 Baseline (CycleGAN)과는 다르게 앞서 설명한 multi-modal 성질이 반영 된다는 것이다. 즉, 신발을 translation 시킬 경우 단순하게 하나의 이미지로 translation 되는 것이 아닌 다양한 색상의 이미지로 translation 되는 것을 확인 할 수 있다.
- <그림 22>
- <그림 23>
- <그림 24>
- <그림 25>
+ ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/22.jpg)
+ ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/23.jpg)
+ ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/24.jpg)
+![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/25.jpg)
  
- 이는 이미지 quality 뿐만 아니라 diversity에서도 확인이 되는데, 특히 위에서 언급했던 loss를 일부 적용하는 ablation study에서도 MUNIT의 우수성을 확인 할수가 있다. 
+ 이는 이미지 quality 뿐만 아니라 diversity에서도 확인이 되는데, 특히 위에서 언급했던 loss를 일부 적용하는 ablation study에서도 MUNIT의 우수성을 확인 할수가 있다.(이 외에 CIS, IS 스코어 관련 내용은 논문 마지막을 참조하면 된다.)
  
- <그림 26>
- 
+![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/26.jpg)
  
  
  
