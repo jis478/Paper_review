@@ -96,7 +96,8 @@ Lreconci: 생성된 이미지가 content 정보를 잘 보존하고 있도록 �
 
 ###### Adversarial loss
 일반적으로 쓰이는 GAN Adversarial loss를 의미한다.
-![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/21.jpg)
+![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/21.jpg = 150x150)
+
  
 ###### Total loss
 위에서 언급한 loss들을 다음과 같이 종합할 수 있다.
