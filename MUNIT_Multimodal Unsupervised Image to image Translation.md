@@ -45,14 +45,12 @@ Learning disentangled representations
 
 문제를 풀기 위해서 partially shared latent space assumption를 생각해야 한다. 즉, content latent code와 style latent code를 분리하는데, content code는 두 도메인 모두 share하는 형태이며, style code는 특정 도메인에만 속하는 형태인 것이다.
 
-예를 들어 content code와 style code를 가지고 와서 generator ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/7.jpg)
-  를 통해 이미지를 생성하는 경우로 생각 할 수 있다. ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/8.jpg)
-![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/9.jpg)
- 주의할 점은, encoder와 decoder 모두 deterministic하지만,  ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/10.jpg)
+예를 들어 content code와 style code를 가지고 와서 generator ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/8.jpg)
+  를 통해 이미지를 생성하는 경우로 생각 할 수 있다. ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/9.jpg)
+![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/10.jpg)
 
-은 continuous 한 특징이 있다는 것이다. 
- 
-![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/11.jpg)
+주의할 점은, encoder와 decoder 모두 deterministic하지만,  ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/11.jpg) 은 continuous 한 특징이 있다는 것이다. 
+
  
  본 논문에서 제안하는 코드는 다음과 같다. 
 첫 번째 이미지에서 추출된 content code ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/munit/12.jpg)   과
