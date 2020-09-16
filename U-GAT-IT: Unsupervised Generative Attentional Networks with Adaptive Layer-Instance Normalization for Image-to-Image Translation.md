@@ -28,7 +28,7 @@ U-GAT-IT:
 
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/1.jpg)
 
-generator는 encoder $$E_s$$, $$decoder G_t$$, $$aux classifier  \eta_s(x)$$ 로 이루어져 있으며, 여기서  aux classifier는 input 이미지가 특정 도메인 $$X_s$$ 에서 왔는지에 대한 확률을 표현하며, 다음과 같이 encoder의 각 k-th feature map이 global average pooling 및 global max pooling을 된 후 곱해는 weight $$W^k_s$$를 학습한다.
+generator는 encoder $E_s$, $$decoder G_t$$, $$aux classifier  \eta_s(x)$$ 로 이루어져 있으며, 여기서  aux classifier는 input 이미지가 특정 도메인 $$X_s$$ 에서 왔는지에 대한 확률을 표현하며, 다음과 같이 encoder의 각 k-th feature map이 global average pooling 및 global max pooling을 된 후 곱해는 weight $$W^k_s$$를 학습한다.
 $$\eta_s(x) = \sigma(\sum_kw^k_s\sigma_(ij)E^{k_(ij)}(x))$$ 
 
 이를 통해서 domain specific attention feature map $$a_s(x) = w_s * E_s(x) = w^k_s * $$  을 구할 수 있으며, 결국 generator $$G_{s->t}$$는 $$G_t(a_s(x))$$가 된다.
