@@ -1,14 +1,14 @@
 FUNIT: Few-Shot Unsupervised Image-to-Image Translation
 =======================================================
 
-# Abstract
+## Abstract
 ----------
 -	기존 Unpaired image-to-image translation의 경우, 결과가 비교적 성공적이나, 각 도메인 별 학습 단계에서 많은 수량의 이미지가 필요해서 이미지 수량의 적은 경우에는 그 활용도가 낮아질 수 밖에 없다. (CycleGAN 논문을 생각해보면.. 각 도메인 별 (얼룩말, 일반말) 수천장의 이미지가 필요했었음)
 -	일반적으로 사람의 경우에는 작은 수량의 example로도 일반화를 잘하는데, 이러한 few-shot 학습 능력에 착안해서 few-shot unsupervised image to image translation을 제안한다.
 -	본 알고리즘의 특징은, inference 단계에서 소량의 이미지만 가지고 양질의 translation 이미지를 생성할 수 있다는 장점이 있다.
 -	다른 baseline 모델과 비교해서 좋은 성능이 나오는 것을 다양한 실험으로 확인 했다.
 
-# Introduction
+## Introduction
 --------------
 -   사람은 일반화를 잘하는데, 예를 들어 서있는 한 장의 호랑이의 모습을 본 후에 누워있는 호랑이의 모습을 쉽게 상상 할 수 있다. (여러 자세에 있는 동물들을 봤던 경험해서 쉽게 상상 가능) 
 -	기존의 Unpaired image-to-image translation (eg. CycleGAN)의 경우 few-shot의 개념이 없고, 각 도메인 별 다량의 이미지가 학습에 있어야만 인퍼런스가 가능한 단점이 있다.
@@ -16,7 +16,7 @@ FUNIT: Few-Shot Unsupervised Image-to-Image Translation
 -	(가정1) 사람이 많은 동물을 본 후에 새로운 동물을 보고 일반화를 잘하는 것 처럼, 학습 데이터 셋에 도 가급적 많은 class를 포함시켜서 학습 시에 각 class들의 특징을 익히도록 한다.
 -	(가정2) 사람은 새롭게 동물을 본 후에 그 동물 고유의 특징을 기억한 후, 기존에 봤던 다른 동물들의 자세에 그 특징을 적용해서 다른 자세의 새로운 동물을 상상해 낸다. 모델도 마찬가지로 인퍼런스에서 새로운 동물을 볼 때, 그 동물 고유의 특성에 집중하도록 한다.
 
-# Related Work
+## Related Work
 --------------
 -   기존 모델의 단점으로는,  
     1)	Sample inefficient: 학습 시에 class (또는 domain) 별 다량의 이미지가 필요하다.
@@ -26,7 +26,7 @@ FUNIT: Few-Shot Unsupervised Image-to-Image Translation
 -	본 논문과 유사한 multi class 쪽으로 접근한 논문도 있는데, 이 논문들은 translation 대상인 class가 학습 데이터셋 에도 있다는 가정을 하고 있다.   
 -	한편, 기존에 많은 few-shot 관련 논문이 존재하나, few-shot translation을 시도한 것은 이 논문이 최초이라고 볼 수 있다.
 
-# 	Few-shot Unsupervised Image Translation
+## 	Few-shot Unsupervised Image Translation
 -----------------------------------------
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/1.jpg)
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/2.jpg.png)
@@ -36,7 +36,7 @@ FUNIT: Few-Shot Unsupervised Image-to-Image Translation
 -	일반적으로 Generator는 한 개의 이미지를 가지고 translation을 수행하는데, 여기서는 대신 K장의 이미지를 가지고 translation을 수행하는 것이 특징이다. 여기서 y1…yk 이미지는 모두 동일한 class cy에 속하는 이미지 이며, x는 class cx에 속하는 이미지로써, 서로 다른 class가 되어야 한다.
     ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/3.jpg.png)
  
-## Few-shot Image Translator
+#### Few-shot Image Translator
 
 -	Generator는 few-shot image translator라고 부르기로 한다.
 -	생성되는 이미지는 class cy에 속하는 이미지가 될 것이지만, 기본적으로 큰 이미지의 특성은 x와 비슷한 형태를 가질 것이다.
@@ -58,11 +58,11 @@ layer로 쓰는 residual block을 의미한다. Class latent code를 가지고 g
 -	즉, 학습 동안에 class encoder는 source class (학습 데이터 셋에 존재하는 class를 의미함)에서 class specific 한 정보를 추출하며, 인퍼런스 시간에 이러한 추출 능력이 지금까지 보지못한 소량의 데이터에 일반화가 되는 것이다.
 
 
-## Multi-task Adversarial Discriminator
+#### Multi-task Adversarial Discriminator
 
 -	Discriminator D는 여러 개의 adversarial classification task를 동시에 수행하게 된다. 각각의 task는 binary classificiation task (진짜? 가짜 이미지 구별)이다. 만약에 |S|개의 source class가 존재한다면 D는 |S|개의 결과를 생성하게 된다.
     
-#### Discriminator update rule 
+###### Discriminator update rule 
 1) Source class (Cx)의 진짜 이미지에 대해 판정할 경우, 만약 Cx번째 판정 결과가 가짜(false)일 경우 D에 대해 penalize를 하게 된다
 2) Source class (Cx)로부터 생성된 translation image에 대해 판정할 경우, 만약 Cx번째 판정결과가 진짜(positive)일 경우 D를 penalize하게 된다. 
 3) 다른 Source class (Cx 제외)에 대해 판정할때는 판정결과가 가짜(false)가 되더라도 D에 대해 별도의 penalize를 하지 않는다.   
@@ -70,7 +70,7 @@ Generator update rule
 4) G를 업데이트 할때는 G가 생성한 Cx class의 translation이미지가 D로부터 가짜로 판정 (false)될 경우 penalize한다. 
 
 
-##	Learning
+#### Learning
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/5.jpg.png)
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/6.jpg.png)
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/7.jpg.png)
@@ -79,7 +79,7 @@ Generator update rule
 Df는 Discriminator의 마지막 latent feature vector를 의미하며, feature 간의 거리를 계산하여 보다 feature가 유사한 이미지가 생성되도록 하는 역할을 한다. 
 
 
-# Experiments
+## Experiments
 -------------
 
 Few-shot 환경에 맞춰, 학습되는 이미지를 K=1,5,10,20으로 변경하가면서 학습을 수행한 결과는 다음과 같다.
