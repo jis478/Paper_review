@@ -26,6 +26,10 @@ U-GAT-IT:
 
 ## 2. U-GAT-IT
 
+### 2.1 Model
+
+#### 2.11 Generator
+
 ![Representative image](https://github.com/jis478/Paper_review/blob/master/imgs/funit/1.jpg)
 
 generator는 encoder $E_s$, $$decoder G_t$$, $$aux classifier  \eta_s(x)$$ 로 이루어져 있으며, 여기서  aux classifier는 input 이미지가 특정 도메인 $$X_s$$ 에서 왔는지에 대한 확률을 표현하며, 다음과 같이 encoder의 각 k-th feature map이 global average pooling 및 global max pooling을 된 후 곱해는 weight $$W^k_s$$를 학습한다.
@@ -56,3 +60,32 @@ $$AdaIN(x,y) = \sigma(y) * (x-\mu(x)/\sigma(x)) + \mu(y) $$
 따라서, Style Transfer에서는 AdaIN이 쓰이는데, 각 feature 마다 독립적으로다른 style을 주입해준다는 가정이 있기 때문에 (feature channels이 상호 상관 관계가 없다고 가정) 이로 인해서 style이 아닌 content 정보가 함께 일부 transfer 되는 단점이 존재했다. (예: feature들이 모여서 structure 형성) 하지만 Layer Normalization의 경우 이러한 가정이 없기 때문에 (feature channels에 대해 global statistics 계산) content 정보를 잃을 수 있음.
 
 따라서, AdaIN 및 LN을 adpative하게 적용하는 방법으로 translation 성능을 향상 시킬 수 있었음.
+
+#### 2.1.2 Discriminator
+
+Discriminator는 전반적으로 다른 모델들과 매우 유사하며 주요 차이점은 다음과 같다. 
+ 
+Encoder $$ E_{D_t}$$, Classifier $$C_{D_t}$$, 그리고 Aux classifier $$ \eta_{D_t} $$ 로 이루어져 있으며, 다른 모델들과는 다르게 $$ \eta_{D_t} $$ 와 $$D_t(x)$$ 모두 이미지 $$x$$가 진짜 ($$X_t$$) 인지 가짜 ($$G_{s->t}(X_s)$$)로 부터 온 것인지를 판별하는 역할을 하며, 특히  $$D_t(x)$$는 attention feature maps을 활용하여 $$a_{D_t}(x) = w_{D_t} * E_{D_t}(x)$$ 를 계산 하는데 여기서 $$w_{D_t}$$는 위에[서 언급한 Aux classifier $$ \eta_{D_t} $$로 의해 학습되는 파라미터이며, E_{D_t}(x)는 각 단계에서의 encoding된 feature maps을 의미한다. 
+
+따라서, Discriminator는 $$D_t(x)는 C_{D_t}(a_{D_t}(x))$$가 된다.
+
+## 2.2 Loss function
+
+총 4가지의 Loss function이 쓰이는데,  다른 논문에서 찾아볼 수 있는 Adversarial loss  (LSGAN loss), Cycle loss 및 Identiy loss 외에 추가로 CAM loss를 사용한다. 이는 Generator (어디를 보면 더 진짜 같은 가짜 이미지를 생성이 가능할지?) 와 Discriminator (어디를 보면 domain A / B가 가장 차이가 있는지?) 의 attention 작업을 원할하게 이루어지도록 하는 역할을 하게 된다. 
+
+다시 한번 Aux classifier의 역할을 정리해보면, 
+
+1) Generator의 Aux classifier $$\eta_s(x)$$ : Generator의 encoder가 만들어내는 각각의 feature map에 $$\eta_s(x)$$의 가중치 (attention)을 곱해서 encoding 작업이 더욱 효과적으로 수행 (어떤 feature map이 Generator에 있어서 더 중요한지 판단) 되도록 도와준다.  $$\eta_s(x)$$ 결과 값은 이미지 $$x$$가 domain $$X_s$$에서 올 확률을 의미한다.   
+  
+2) Discriminator의 Aux classifier $$ \eta_{D_t} $$: 위와 유사하게 $$ \eta_{D_t} $$의 파라미터는 Discriminator의 feature map 중 어떤 것이 중요한지에 대한 가중치 값임. 즉,  결과 값은 input 이미지 $$x$$가 진짜 이미지 ($$X_t$$) 에서 올 확률을 의미한다. 
+
+즉, Generator CAM Loss에서는 $$\eta_s(x)$$는 도메인에 대한 구분을 할 수 있는 loss 반영을 위해 Binary Cross Entropy loss 구성 ($$\eta_s(x)$$가 이미지 $$x$$가 domain $$X_s$$에서 올 확률을 의미하므로)하며,
+  
+  $$L_{cam}^{s->t}= -(E_{x~X_s}[log(\eta_s(x))] + E_{x~X_t}[log(1-\eta_s(x))])$$
+  
+Discriminator CAM loss에서는 $$ \eta_{D_t} $$는 도메인이 아닌 진짜/가짜에 대한 구분을 하는 loss 반영을 위해 LSGAN loss 형태로 구성을 한다.
+
+$$L^{D_t}_{cam} = E_{x~X_t}[(\eta_{D_t}(x))^2] + E_{x~X_s}[(1-\eta_{D_t}(G_{s->t}(x))^2]$$
+  
+
+
