@@ -87,5 +87,18 @@ Discriminator CAM loss에서는 $$ \eta_{D_t} $$는 도메인이 아닌 진짜/�
 
 $$L^{D_t}_{cam} = E_{x~X_t}[(\eta_{D_t}(x))^2] + E_{x~X_s}[(1-\eta_{D_t}(G_{s->t}(x))^2]$$
   
+  
+총 Full objective는 아래와 같다.  (아래처럼 총 8개의 네트워크를 학습하게 된다.)
+$$min_{G_{s->t}, G_{t->s}, \eta_s, \eta_t}max_{D_s,D_t,\eta_{D_s},\eta_{D_t}}
+\lambda_1*L_{lsgan}+\lambda_2*L_{cycle}+\lambda_3*L_{identity}+\lambda_4*L_{cam}$$
 
+<그림: Figure 2>
+(b)에서 보이는 것 처럼 generator는 translation에 중요한 부분을 하이라이트 하는 것을 확인 할 수 있으며, (c), (d)를 통해서 discriminator가 진짜/가짜 판별을 위해 집중하는 부분을 CAM 으로 확인해 볼 수 있다.
+
+#### 3.3.2 AdaLIN analysis 
+AdaLIN은 generator의 decoder에만 적용되었으며 (비교: StyleGAN 및 Style Transfer 참조), 학습되는 gate 파라미터 $$\rho$$를 통해서 IN과 LN을 혼합해서 반영하도록 되어 있다. 여기서 IN과 LN의 차이를 대비해서 볼 수 있는데, (c)에 보이는 IN의 경우 'feature map 단위'로 정규화가 일어나고 target domain 이미지의 statistics가 반영되기 때문에 때문에 각각 feature map 고유의 특성 (귀걸이, 얼굴 뼈)들이 스타일이 어느정도 변형된 상태에서 비교적 잘 보존되는 것을 볼 수 있다. 하지만 feature map 단위 이다 보니 global statistics 반영이 어렵기 때문에 전반적으로 anime style이 부족한 것을 확인 할 수 있다. 하지만 (d)에 보이는 LN의 경우,  
+
+
+
+<그림: Figure 3>
 
