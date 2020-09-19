@@ -22,6 +22,8 @@ U-GAT-IT:
    1) GANHOPPER  [https://arxiv.org/abs/2002.10102] : translation을 한번에 하는게 아니라, 여러번 나눠서 순차적으로(sequentially) 시도하는 방법. 동일한 generator를 여러번 연결하여 25%->50%->75%->100% smooth하게 translation 시도 함
    
    2) ACL-GAN [https://arxiv.org/abs/2003.04858]  : Cycle consistency loss를 변형하여 기존 픽셀단위 loss 계산이 아닌 이미지 간 분포 단위 loss 계산으로 변환하여 좀 더 유연한 translation을 시도 함
+   
+   3) AttentioGAN [https://github.com/Ha0Tang/AttentionGAN] : generator가 이미지 생성 시 foreground와 background에 attention을 활용, 분리하여 이미지를 생성. 
 ~~~
 
 ## 2. U-GAT-IT
@@ -96,9 +98,32 @@ $$min_{G_{s->t}, G_{t->s}, \eta_s, \eta_t}max_{D_s,D_t,\eta_{D_s},\eta_{D_t}}
 (b)에서 보이는 것 처럼 generator는 translation에 중요한 부분을 하이라이트 하는 것을 확인 할 수 있으며, (c), (d)를 통해서 discriminator가 진짜/가짜 판별을 위해 집중하는 부분을 CAM 으로 확인해 볼 수 있다.
 
 #### 3.3.2 AdaLIN analysis 
-AdaLIN은 generator의 decoder에만 적용되었으며 (비교: StyleGAN 및 Style Transfer 참조), 학습되는 gate 파라미터 $$\rho$$를 통해서 IN과 LN을 혼합해서 반영하도록 되어 있다. 여기서 IN과 LN의 차이를 대비해서 볼 수 있는데, (c)에 보이는 IN의 경우 'feature map 단위'로 정규화가 일어나고 target domain 이미지의 statistics가 반영되기 때문에 때문에 각각 feature map 고유의 특성 (귀걸이, 얼굴 뼈)들이 스타일이 어느정도 변형된 상태에서 비교적 잘 보존되는 것을 볼 수 있다. 하지만 feature map 단위 이다 보니 global statistics 반영이 어렵기 때문에 전반적으로 anime style이 부족한 것을 확인 할 수 있다. 하지만 (d)에 보이는 LN의 경우,  
+AdaLIN은 generator의 decoder에만 적용되었으며 (이유: StyleGAN 및 Style Transfer와 유사하게 decoding 단계에서 style feature를 추가하기 위함), 학습되는 gate 파라미터 $$\rho$$를 통해서 IN과 LN을 혼합해서 adaptive하게 반영하도록 되어 있다. 여기서 IN과 LN의 차이를 비교해서 볼 수 있는데, (c)에 보이는 IN의 경우 각각의 특성을 가진 'feature map 단위' statistics가 계산되고 정규화가 수행되기 때문에 source domain 이미지의 feature map 고유의 특성 (귀걸이, 광대뼈 그림자 등)들이 비교적 잘 보존되는 것을 볼 수 있다. 하지만 feature map 단위 이다 보니 global statistics 반영이 어렵기 때문에 전반적으로 아직은 원하는 target domain style이 부족한 것을 확인 할 수 있다. 
+
+이와 반대로 (d)에 보이는 LN의 경우, layer-wise 정규화로 인해 global statistics가 계산되기 때문에 생성되는 이미지가 target domain style을 가지고 있으나, 세부적인 source domain 이미지의 features들이 유실되는 경향을 볼 수 있다.
+
+따라서, AdaLIN을 활용하게 되면 feature embedding 단계 (residual blocks)에서는 feature 특성을 보전할 수 있는 IN에 더욱 의존하고, upsampling 단계에서는 global statistics를 반영할 수 있는 LN에 더욱 의존하는 방향으로 학습이 일어나게 된다. (하지만 논문에 증거 자료는 없음)
+
+<그림: table1>
+
+#### 3.3.3 Qualitative Evaluation
+<그림: figure4, table 2>
+참고로, 여기서 MUNIT의 경우 Multi-modal 처리를 위해 style code를 랜덤하게 생성해서 입히는 방식으로 진행되기 때문에 의외로 스코어가 낮게 나오는 경향을 발견했으며, u-gat-it의 경우 아키텍쳐와 하이퍼파라미터를 고정하고 학습을 했음에도 모든 데이터 셋에 좋은 결과가 나온 것을 확인할 수 있다.
 
 
 
-<그림: Figure 3>
+#### 3.3.4 Quantitative Evaluation
+<그림: figure 5>
+ 1) u-gat-it이 전반적으로 가장 좋은 스코어를 보임
+ 2) 유사하게 attention module를 사용한 AGGAN보다 더욱 좋은 성능을 보이나, AGGAN 논문에서는 반대로 AGGAN 성능이 높다고 주장..
+ 3) 기존 anime translation에 특화된 CartoonGAN의 경우 주요 feature 중에 하나인 "눈" translation에 실패하면서 KID 점수가 저하됨
+    -> CartoonGAN의 경우, shape translation 보다는 style transfer와 유사하게 texture를 변형하는 쪽에 중점을 두고 있기 때문에 눈 모양에 변화가 거의 
+
+
+
+
+- END - 
+
+ 
+ 
 
