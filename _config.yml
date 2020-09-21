@@ -14,6 +14,13 @@
 remote_theme           : "mmistakes/minimal-mistakes"
 minimal_mistakes_skin    : "default"
 
+# Conversion
+markdown: kramdown
+highlighter: rouge
+lsi: false
+excerpt_separator: "\n\n"
+incremental: false
+
 # Site Settings
 locale                   : "en-US"
 title                    : "Mark Kim's journey to DL"
